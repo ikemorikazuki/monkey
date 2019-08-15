@@ -2,7 +2,7 @@
 
 package ast
 
-import "token"
+import "monkey/token"
 
 type Node interface {
 	TokenLiteral() string
