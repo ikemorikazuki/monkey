@@ -22,6 +22,7 @@ type Expression interface {
 	expressionNode()
 }
 
+//
 type Program struct {
 	Statements []Statement
 }
@@ -33,7 +34,6 @@ func (p *Program) TokenLiteral() string {
 		return ""
 	}
 }
-
 func (p *Program) String() string {
 	var out bytes.Buffer
 	for _, s := range p.Statements {
@@ -42,6 +42,7 @@ func (p *Program) String() string {
 	return out.String()
 }
 
+//
 type LetStatement struct {
 	Token token.Token // token.LET トークン 現在のノード
 	Name  *Identifier // 接続している エッジ
@@ -63,6 +64,7 @@ func (ls *LetStatement) String() string {
 func (ls *LetStatement) statementNode()       {}
 func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
 
+//
 type Identifier struct {
 	Token token.Token // token.IDENT トークン
 	Value string
@@ -72,6 +74,7 @@ func (i *Identifier) String() string       { return i.Value }
 func (i *Identifier) expressionNode()      {}
 func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
 
+//
 type ReturnStatement struct {
 	Token       token.Token // return トークン
 	ReturnValue Expression
@@ -91,6 +94,7 @@ func (rs *ReturnStatement) String() string {
 func (rs *ReturnStatement) statementNode()       {}
 func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
 
+//
 type ExpressionStatement struct {
 	Token      token.Token // 式の最初のトークン
 	Expression Expression
@@ -105,13 +109,32 @@ func (es *ExpressionStatement) String() string {
 func (es *ExpressionStatement) statementNode()       {}
 func (es *ExpressionStatement) TokenLiteral() string { return es.Token.Literal }
 
+//
 type IntegerLiteral struct {
 	Token token.Token
 	Value int64
 }
 
-func (il *IntegerLiteral) expressionNode() {}
-
+func (il *IntegerLiteral) expressionNode()      {}
 func (il *IntegerLiteral) TokenLiteral() string { return il.Token.Literal }
+func (il *IntegerLiteral) String() string       { return il.Token.Literal }
 
-func (il *IntegerLiteral) String() string { return il.Token.Literal }
+//
+type PrefixExpression struct {
+	Token    token.Token // 前置トークン
+	Operator string
+	Right    Expression
+}
+
+func (pe *PrefixExpression) expressionNode()      {}
+func (pe *PrefixExpression) TokenLiteral() string { return pe.Token.Literal }
+func (pe *PrefixExpression) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("(")
+	out.WriteString(pe.Operator)
+	out.WriteString(pe.Right.String())
+	out.WriteString(")")
+
+	return out.String()
+}
