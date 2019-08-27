@@ -5,7 +5,7 @@ import "fmt"
 type ObjectType string
 
 const (
-	INTEGER_OBJ = "TNTEGER"
+	INTEGER_OBJ = "INTEGER"
 	BOOLEAN_OBJ = "BOOLEAN"
 	NULL_OBJ    = "NULL"
 )

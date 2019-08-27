@@ -4,12 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"monkey/evaluator"
 	"monkey/lexer"
 	"monkey/parser"
 )
 
 const PROMT = ">> "
-const MONKEY_FACE = `            __,__
+const MONKEY_FACE = `
+            __,__
    .--.  .-"     "-.  .--.
   / .. \/  .-. .-.  \/ .. \
  | |  '|  /   Y   \  |'  | |
@@ -24,7 +26,7 @@ const MONKEY_FACE = `            __,__
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
-	for {
+	for count := 1; ; count++ {
 		fmt.Printf(PROMT)
 		scanned := scanner.Scan()
 
@@ -45,8 +47,12 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		io.WriteString(out, program.String())
-		io.WriteString(out, "\n")
+		evaluated := evaluator.Eval(program)
+		if evaluated != nil {
+			io.WriteString(out, fmt.Sprintf("\x1b[34;1mres%d\x1b[0m: \x1b[32;1m%s\x1b[0m = ", count, evaluated.Type()))
+			io.WriteString(out, evaluated.Inspect())
+			io.WriteString(out, "\n")
+		}
 	}
 }
 
