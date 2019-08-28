@@ -6,6 +6,7 @@ import (
 	"io"
 	"monkey/evaluator"
 	"monkey/lexer"
+	"monkey/object"
 	"monkey/parser"
 )
 
@@ -26,6 +27,7 @@ const MONKEY_FACE = `
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	env := object.NewEnvironment()
 	for count := 1; ; count++ {
 		fmt.Printf(PROMT)
 		scanned := scanner.Scan()
@@ -47,7 +49,7 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		evaluated := evaluator.Eval(program)
+		evaluated := evaluator.Eval(program, env)
 		if evaluated != nil {
 			io.WriteString(out, fmt.Sprintf("\x1b[34;1mres%d\x1b[0m: \x1b[32;1m%s\x1b[0m = ", count, evaluated.Type()))
 			io.WriteString(out, evaluated.Inspect())
