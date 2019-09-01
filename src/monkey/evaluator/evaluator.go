@@ -30,7 +30,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return val
 		}
 		return &object.ReturnValue{Value: val}
-	case *ast.LetStatement:
+	case *ast.LetStatement: // TODO: 変数定義のときにreplに定義結果を出力するようにしたいのでここを変更するべき
 		val := Eval(node.Value, env)
 		if isError(val) {
 			return val
