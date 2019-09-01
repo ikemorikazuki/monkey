@@ -10,7 +10,7 @@ import (
 	"monkey/parser"
 )
 
-const PROMT = ">> "
+const PROMT = "\x1b[31;1mmonkey\x1b[0m:>> "
 const MONKEY_FACE = `
             __,__
    .--.  .-"     "-.  .--.
@@ -53,7 +53,7 @@ func Start(in io.Reader, out io.Writer) {
 		if evaluated != nil {
 			io.WriteString(out, fmt.Sprintf("\x1b[34;1mres%d\x1b[0m: \x1b[32;1m%s\x1b[0m = ", count, evaluated.Type()))
 			io.WriteString(out, evaluated.Inspect())
-			io.WriteString(out, "\n")
+			io.WriteString(out, "\n\n")
 		}
 	}
 }
